@@ -36,7 +36,10 @@ function deleteBookmarkRequest(bookmarkId, cb) {
 export default function BookmarkItem(props) {
   return (
     <BookmarksContext.Consumer>
+      {(context) => (
         <li className='BookmarkItem'>
+
+
       <div className='BookmarkItem__row'>
         <h3 className='BookmarkItem__title'>
           <a
@@ -69,7 +72,7 @@ export default function BookmarkItem(props) {
 }
 
     </BookmarksContext.Consumer>
-    
+  )}
 
 BookmarkItem.defaultProps = {
   onClickDelete: () => {},
