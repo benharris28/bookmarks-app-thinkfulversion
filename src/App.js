@@ -1,7 +1,9 @@
 import React, { Component } from 'react';
 import { Route } from 'react-router-dom';
+import BookmarksContext from './BookmarksContext';
 import AddBookmark from './AddBookmark/AddBookmark';
 import BookmarkList from './BookmarkList/BookmarkList';
+import EditBookmark from './EditBookmark/EditBookmark';
 import Nav from './Nav/Nav';
 import config from './config';
 import './App.css';
@@ -33,7 +35,7 @@ const bookmarks = [
 class App extends Component {
   state = {
     
-    bookmarks,
+    bookmarks: [],
     error: null,
   };
 
@@ -48,6 +50,12 @@ class App extends Component {
   }
 
   addBookmark = bookmark => {
+    this.setState({
+      bookmarks: [ ...this.state.bookmarks, bookmark ],
+    })
+  }
+
+  editBookmark = bookmark => {
     this.setState({
       bookmarks: [ ...this.state.bookmarks, bookmark ],
     })
@@ -72,31 +80,41 @@ class App extends Component {
   }
 
   render() {
+    const contextValue = {
+      bookmarks: this.state.bookmarks,
+      addBookmark: this.addBookmark,
+      deleteBookmark: this.deleteBookmark,
+      updateBookmark: this.updateBookmark
+    }
+    
     const { bookmarks } = this.state
     return (
       <main className='App'>
         <h1>Bookmarks!</h1>
+        <BookmarksContext.Provider value={contextValue}>
         <Nav />
         <div className='content' aria-live='polite'>
           <Route
             path='/add-bookmark'
-            render={({ history }) => {
-            console.log(history)
-            return <AddBookmark
-              onAddBookmark={this.addBookmark}
-              onClickCancel={() => {history.push('/')}}
+            component={AddBookmark}
+            />
+    }}
+          />
+          <Route
+            path='/edit-bookmark/:bookmarkId'
+            component={EditBookmark}
+              
             />
     }}
           />
           <Route
             exact
             path='/'
-            render={() => 
-            <BookmarkList
-              bookmarks={bookmarks}
-            />}
+            component={BookmarkList}
+              
           />
         </div>
+        </BookmarksContext.Provider>
       </main>
     );
   }

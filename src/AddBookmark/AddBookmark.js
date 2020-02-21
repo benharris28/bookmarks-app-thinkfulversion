@@ -1,6 +1,7 @@
 import React, { Component } from  'react';
 import { withRouter } from 'react-router-dom';
 import config from '../config'
+import BookmarksContext from '../BookmarksContext';
 import './AddBookmark.css';
 
 const Required = () => (
@@ -11,6 +12,7 @@ class AddBookmark extends Component {
   static defaultProps = {
     onAddBookmark: () => {}
   };
+  static contextType = BookmarksContext; 
 
   state = {
     error: null,
@@ -51,7 +53,7 @@ class AddBookmark extends Component {
         description.value = ''
         rating.value = ''
         this.props.history.push('/')
-        this.props.onAddBookmark(data)
+        this.context.onAddBookmark(data)
       })
       .catch(error => {
         this.setState({ error })
