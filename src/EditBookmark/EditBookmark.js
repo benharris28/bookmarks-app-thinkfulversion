@@ -31,11 +31,11 @@ class EditBookmark extends React.Component {
 
     componentDidMount() {
         const { bookmarkId } = this.props.match.params
+        console.log(bookmarkId)
 
-        fetch(`http://localhost:8000/api/bookmarks/${bookmarkId}`, {
+        fetch(config.API_ENDPOINT + `/${bookmarkId}`, {
             method: 'GET',
             headers: {
-                
                   'Authorization': `Bearer ${config.API_KEY}`
                 }
               })
@@ -63,10 +63,10 @@ class EditBookmark extends React.Component {
             })
         }
     
-    updateTitle = (name) => {
+    updateTitle = (title) => {
         console.log(this.state)
         this.setState({
-            name: name
+            title: title
         });
     }
 
@@ -146,6 +146,9 @@ class EditBookmark extends React.Component {
                             type='hidden'
                             name='id'
                             />
+                        <div className='EditBookmark__error' role='alert'>
+                            {error && <p>{error.message}</p>}
+                        </div>
                         <label htmlFor="title">
                             Bookmark Title
                         </label>
