@@ -9,9 +9,7 @@ const Required = () => (
 )
 
 class AddBookmark extends Component {
-  static defaultProps = {
-    onAddBookmark: () => {}
-  };
+  
   static contextType = BookmarksContext; 
 
   state = {
@@ -26,25 +24,24 @@ class AddBookmark extends Component {
       title: title.value,
       url: url.value,
       description: description.value,
-      rating: rating.value,
+      rating: Number(rating.value),
     }
     this.setState({ error: null })
+    
     fetch(config.API_ENDPOINT, {
       method: 'POST',
       body: JSON.stringify(bookmark),
       headers: {
         'content-type': 'application/json',
-        'authorization': `bearer ${config.API_KEY}`
+        'authorization': `Bearer ${config.API_KEY}`
       }
     })
       .then(res => {
         if (!res.ok) {
-          // get the error message from the response,
-          return res.json().then(error => {
-            // then throw it
-            throw error
-          })
-        }
+          
+          return res.json().then(error => Promise.reject(error))
+          }
+        
         return res.json()
       })
       .then(data => {
@@ -52,10 +49,12 @@ class AddBookmark extends Component {
         url.value = ''
         description.value = ''
         rating.value = ''
+        this.context.addBookmark(data)
         this.props.history.push('/')
-        this.context.onAddBookmark(data)
+        
       })
       .catch(error => {
+        console.error(error)
         this.setState({ error })
       })
   }

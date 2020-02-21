@@ -1,11 +1,22 @@
 import React from  'react';
 import BookmarksContext from '../BookmarksContext';
+import PropTypes from 'prop-types';
+
 
 import config from '../config'
 import './EditBookmark.css';
 
 
 class EditBookmark extends React.Component {
+    static propTypes = {
+        match: PropTypes.shape({
+          params: PropTypes.object,
+        }),
+        history: PropTypes.shape({
+          push: PropTypes.func,
+        }).isRequired,
+      };
+    
     static contextType = BookmarksContext;
 
     
@@ -21,7 +32,7 @@ class EditBookmark extends React.Component {
     componentDidMount() {
         const { bookmarkId } = this.props.match.params
 
-        fetch(`https://localhost:8000/api/bookmarks/${bookmarkId}`, {
+        fetch(`http://localhost:8000/api/bookmarks/${bookmarkId}`, {
             method: 'GET',
             headers: {
                 
@@ -29,13 +40,14 @@ class EditBookmark extends React.Component {
                 }
               })
                 .then(res => {
-                  if (!res.ok) 
+                  if (!res.ok) {
                     return res.json().then(error => Promise.reject(error))
-
+                  }
                   
                   return res.json()
                 })
                 .then(responseData => {
+                    console.log(responseData)
                     this.setState({
                         id: responseData.id,
                         title: responseData.title,
@@ -52,6 +64,7 @@ class EditBookmark extends React.Component {
         }
     
     updateTitle = (name) => {
+        console.log(this.state)
         this.setState({
             name: name
         });
@@ -76,10 +89,12 @@ class EditBookmark extends React.Component {
     }
 
     handleSubmit = e => {
+        console.log(this.state)
         e.preventDefault()
         const { bookmarkId } = this.props.match.params
         const { id, title, url, description, rating } = this.state
         const newBookmark = { id, title, url, description, rating }
+        
         fetch(config.API_ENDPOINT + `/${bookmarkId}`, {
           method: 'PATCH',
           body: JSON.stringify(newBookmark),
@@ -94,7 +109,7 @@ class EditBookmark extends React.Component {
           })
           .then(() => {
             this.resetFields(newBookmark)
-            this.context.updateBookmark(newBookmark)
+            this.context.editBookmark(newBookmark)
             this.props.history.push('/')
           })
           .catch(error => {
@@ -120,14 +135,17 @@ class EditBookmark extends React.Component {
     
     
     render() {
-        const { title, url, description, rating } = this.state
+        const { error, title, url, description, rating } = this.state
         return (
             <section className='edit-bookmark'>
                 <h2>Edit Bookmark</h2>
                 <form
                     classname="edit-bookmark-form"
                     onSubmit={e => this.handleSubmit(e)}>
-
+                         <input
+                            type='hidden'
+                            name='id'
+                            />
                         <label htmlFor="title">
                             Bookmark Title
                         </label>

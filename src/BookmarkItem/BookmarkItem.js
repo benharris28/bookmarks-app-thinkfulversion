@@ -2,6 +2,7 @@ import React from 'react';
 import Rating from '../Rating/Rating';
 import { Link } from 'react-router-dom'
 import BookmarksContext from '../BookmarksContext';
+import config from '../config';
 import './BookmarkItem.css';
 
 
