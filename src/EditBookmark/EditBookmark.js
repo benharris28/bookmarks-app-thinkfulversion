@@ -140,7 +140,7 @@ class EditBookmark extends React.Component {
             <section className='edit-bookmark'>
                 <h2>Edit Bookmark</h2>
                 <form
-                    classname="edit-bookmark-form"
+                    className="edit-bookmark-form"
                     onSubmit={e => this.handleSubmit(e)}>
                          <input
                             type='hidden'
@@ -190,7 +190,7 @@ class EditBookmark extends React.Component {
                             onChange={e => this.updateRating(e.target.value)} />
                     <button
                         type="submit">
-
+                            Submit
                     </button>
                     <button type='button' onClick={this.handleClickCancel}>
                         Cancel

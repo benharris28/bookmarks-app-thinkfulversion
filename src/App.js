@@ -32,9 +32,13 @@ class App extends Component {
     })
   }
 
-  editBookmark = bookmark => {
+  
+
+  editBookmark = updatedBookmark => {
     this.setState({
-      bookmarks: [ ...this.state.bookmarks, bookmark ],
+      bookmarks: this.state.bookmarks.map(bm =>
+        (bm.id !== updatedBookmark.id) ? bm : updatedBookmark
+      )
     })
   }
 

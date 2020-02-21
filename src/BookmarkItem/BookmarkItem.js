@@ -29,6 +29,7 @@ function deleteBookmarkRequest(bookmarkId, cb) {
 }
 
 export default function BookmarkItem(props) {
+  console.log(props)
   return (
     <BookmarksContext.Consumer>
       {(context) => (
@@ -48,7 +49,7 @@ export default function BookmarkItem(props) {
         {props.description}
       </p>
       <div className='BookmarkItem__buttons'>
-        <Link to={`/edit-bookmarks/${props.id}`}>
+        <Link to={`/edit-bookmark/${props.id}`}>
               Edit
         </Link>
         <button
